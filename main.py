@@ -46,10 +46,8 @@ def make_batch(sentences):
     return input_batch, target_batch
 
 model = NNLM(n_class=n_class,m=m,n_step=n_step,n_hidden=n_hidden)
-
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
-
 input_batch, target_batch = make_batch(sentences)
 input_batch = Variable(torch.LongTensor(input_batch))
 target_batch = Variable(torch.LongTensor(target_batch))
@@ -64,12 +62,9 @@ for epoch in range(5000):
     loss = criterion(output, target_batch)
     if (epoch + 1)%1000 == 0:
         print('Epoch:', '%04d' % (epoch + 1), 'cost =', '{:.6f}'.format(loss))
-
     loss.backward()
     optimizer.step()
-
 # Predict
 predict = model(input_batch).data.max(1, keepdim=True)[1]
-
 # Test
 print([sen.split()[:2] for sen in sentences], '->', [number_dict[n.item()] for n in predict.squeeze()])
